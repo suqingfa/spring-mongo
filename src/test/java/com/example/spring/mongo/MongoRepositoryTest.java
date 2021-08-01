@@ -20,13 +20,11 @@ public class MongoRepositoryTest {
     public void test() {
         repository.deleteAll();
 
-        User user = new User();
-        user.setId(0);
-        user.setUsername("mongo");
-        user.setPassword("password");
+        User user = new User(null, "mongo", "password");
 
         User save = repository.save(user);
-        Assertions.assertEquals(user, save);
+        Assertions.assertEquals(user.username(), save.username());
+        Assertions.assertEquals(user.password(), save.password());
         log.info("save {}", save);
 
         List<User> all = repository.findAll();
@@ -34,7 +32,8 @@ public class MongoRepositoryTest {
         log.info("find all {}", all);
 
         User first = all.get(0);
-        Assertions.assertEquals(user, first);
+        Assertions.assertEquals(user.username(), first.username());
+        Assertions.assertEquals(user.password(), first.password());
 
         List<User> byUsername = repository.findByUsername("mongo");
         Assertions.assertEquals(1, byUsername.size());
